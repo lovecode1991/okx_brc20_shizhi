@@ -2,7 +2,7 @@
 // @name         OKX brc20市值
 // @namespace    https://www.okx.com/
 // @version      1.1
-// @description  监控 OKX 请求并执行功能
+// @description  监控 OKX brc20  市值
 // @author       twitter : https://twitter.com/yinghe_web3
 // @match        https://www.okx.com/*
 // @grant        none
@@ -70,7 +70,21 @@
                 }
             });
         }
+        if(method === 'GET' && url.includes('/priapi/v1/nft/brc/tokens/')){
+            this.addEventListener('load', function() {
+                if (this.status === 200) {
+                    var responseJSON = JSON.parse(this.responseText);
+                    let number = responseJSON.data.totalMinted*responseJSON.data.usdFloorPrice;
+                    let formattedNumber = number.toFixed(0).replace(/\d(?=(\d{3})+$)/g, '$&,');
+                    console.log(1,formattedNumber)
+                    const htmlcode = '<span class="index_line__BsPEw"></span>  <div class="index_item__TKWNY"><div class="index_item-data-container__aLcF-"><div class="index_item-data__X-ue1 flex align-items-center justify-content-center font-700">'+formattedNumber+'</div><h5 class="index_item-name__WlTFp">市值</h5></div></div>';
+                    const shizhidocument = document.querySelector("#root > div > div > div.nft-content-container > div > div > div > div.flex")
+                    shizhidocument.insertAdjacentHTML('beforeend',htmlcode);
 
+
+                }
+            });
+        }
 
         originalOpen.apply(this, arguments);
     };
